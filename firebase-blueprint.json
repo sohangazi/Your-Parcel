@@ -1,0 +1,265 @@
+{
+  "entities": {
+    "Country": {
+      "title": "Country",
+      "description": "Destination country with shipping configuration",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "code": { "type": "string" },
+        "flag": { "type": "string" },
+        "currency": { "type": "string" },
+        "basePrice": { "type": "number" },
+        "additionalKgPrice": { "type": "number" },
+        "estimatedDays": { "type": "string" },
+        "availableProductIds": { "type": "array" },
+        "status": { "type": "string", "enum": ["active", "inactive"] },
+        "isPopular": { "type": "boolean" },
+        "notes": { "type": "string" },
+        "createdAt": { "type": "string" },
+        "updatedAt": { "type": "string" }
+      },
+      "required": ["name", "code", "status"]
+    },
+    "Product": {
+      "title": "Product",
+      "description": "Shippable parcel item category",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "code": { "type": "string" },
+        "category": { "type": "string" },
+        "description": { "type": "string" },
+        "icon": { "type": "string" },
+        "status": { "type": "string", "enum": ["active", "inactive"] },
+        "maxWeight": { "type": "number" },
+        "restricted": { "type": "boolean" },
+        "createdAt": { "type": "string" },
+        "updatedAt": { "type": "string" }
+      },
+      "required": ["name", "code", "status"]
+    },
+    "PricingRule": {
+      "title": "PricingRule",
+      "description": "Country and product specific dynamic pricing rule",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "countryId": { "type": "string" },
+        "countryName": { "type": "string" },
+        "productId": { "type": "string" },
+        "productName": { "type": "string" },
+        "pricingType": { "type": "string", "enum": ["slabs", "base_plus_additional"] },
+        "baseKg": { "type": "number" },
+        "basePrice": { "type": "number" },
+        "additionalKgPrice": { "type": "number" },
+        "slabs": { "type": "array" },
+        "status": { "type": "string", "enum": ["active", "draft", "inactive"] },
+        "version": { "type": "number" },
+        "createdAt": { "type": "string" },
+        "updatedAt": { "type": "string" }
+      },
+      "required": ["countryId", "productId", "pricingType", "status"]
+    },
+    "Shipment": {
+      "title": "Shipment",
+      "description": "Courier shipment with real-time tracking details",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "trackingNumber": { "type": "string" },
+        "senderName": { "type": "string" },
+        "senderPhone": { "type": "string" },
+        "senderEmail": { "type": "string" },
+        "senderAddress": { "type": "string" },
+        "receiverName": { "type": "string" },
+        "receiverPhone": { "type": "string" },
+        "receiverEmail": { "type": "string" },
+        "receiverAddress": { "type": "string" },
+        "destinationCountry": { "type": "string" },
+        "destinationCountryCode": { "type": "string" },
+        "productId": { "type": "string" },
+        "productName": { "type": "string" },
+        "weight": { "type": "number" },
+        "quantity": { "type": "number" },
+        "dimensions": { "type": "string" },
+        "totalPrice": { "type": "number" },
+        "currency": { "type": "string" },
+        "paymentStatus": { "type": "string", "enum": ["pending", "paid", "failed", "refunded"] },
+        "paymentMethod": { "type": "string" },
+        "status": { "type": "string" },
+        "currentLocation": { "type": "string" },
+        "estimatedDelivery": { "type": "string" },
+        "events": { "type": "array" },
+        "createdAt": { "type": "string" },
+        "updatedAt": { "type": "string" }
+      },
+      "required": ["trackingNumber", "senderName", "receiverName", "destinationCountry", "weight", "status"]
+    },
+    "QuoteRequest": {
+      "title": "QuoteRequest",
+      "description": "Customer parcel quote and booking inquiries",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "senderName": { "type": "string" },
+        "senderPhone": { "type": "string" },
+        "senderEmail": { "type": "string" },
+        "senderAddress": { "type": "string" },
+        "receiverName": { "type": "string" },
+        "receiverPhone": { "type": "string" },
+        "receiverEmail": { "type": "string" },
+        "receiverAddress": { "type": "string" },
+        "destinationCountry": { "type": "string" },
+        "productId": { "type": "string" },
+        "productName": { "type": "string" },
+        "weight": { "type": "number" },
+        "quantity": { "type": "number" },
+        "description": { "type": "string" },
+        "calculatedPrice": { "type": "number" },
+        "currency": { "type": "string" },
+        "status": { "type": "string", "enum": ["pending", "approved", "rejected", "converted"] },
+        "adminNotes": { "type": "string" },
+        "createdAt": { "type": "string" }
+      },
+      "required": ["senderName", "senderPhone", "destinationCountry", "weight", "status"]
+    },
+    "ContactMessage": {
+      "title": "ContactMessage",
+      "description": "Customer messages and inquiries",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "email": { "type": "string" },
+        "phone": { "type": "string" },
+        "subject": { "type": "string" },
+        "message": { "type": "string" },
+        "status": { "type": "string", "enum": ["unread", "read", "replied"] },
+        "createdAt": { "type": "string" }
+      },
+      "required": ["name", "email", "message"]
+    },
+    "BlogPost": {
+      "title": "BlogPost",
+      "description": "Logistics news and shipping guides",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "title": { "type": "string" },
+        "slug": { "type": "string" },
+        "featuredImage": { "type": "string" },
+        "description": { "type": "string" },
+        "content": { "type": "string" },
+        "category": { "type": "string" },
+        "author": { "type": "string" },
+        "status": { "type": "string", "enum": ["draft", "published"] },
+        "seoTitle": { "type": "string" },
+        "seoDescription": { "type": "string" },
+        "keywords": { "type": "string" },
+        "publishedAt": { "type": "string" },
+        "createdAt": { "type": "string" },
+        "updatedAt": { "type": "string" }
+      },
+      "required": ["title", "slug", "content", "status"]
+    },
+    "WebsiteSettings": {
+      "title": "WebsiteSettings",
+      "description": "CMS settings for public website",
+      "type": "object",
+      "properties": {
+        "brandName": { "type": "string" },
+        "tagline": { "type": "string" },
+        "heroTitle": { "type": "string" },
+        "heroSubtitle": { "type": "string" },
+        "phone": { "type": "string" },
+        "email": { "type": "string" },
+        "address": { "type": "string" },
+        "whatsappNumber": { "type": "string" },
+        "noticeBanner": { "type": "string" },
+        "noticeBannerActive": { "type": "boolean" },
+        "currencySymbol": { "type": "string" },
+        "updatedAt": { "type": "string" }
+      }
+    },
+    "AdminNotification": {
+      "title": "AdminNotification",
+      "description": "System and business event notifications",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "title": { "type": "string" },
+        "message": { "type": "string" },
+        "type": { "type": "string" },
+        "read": { "type": "boolean" },
+        "link": { "type": "string" },
+        "createdAt": { "type": "string" }
+      },
+      "required": ["title", "message"]
+    },
+    "ActivityLog": {
+      "title": "ActivityLog",
+      "description": "Audit trail for admin actions",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "adminEmail": { "type": "string" },
+        "action": { "type": "string" },
+        "details": { "type": "string" },
+        "category": { "type": "string" },
+        "timestamp": { "type": "string" }
+      },
+      "required": ["adminEmail", "action", "timestamp"]
+    }
+  },
+  "firestore": {
+    "/countries/{countryId}": {
+      "schema": "Country",
+      "description": "List of serviceable destination countries"
+    },
+    "/products/{productId}": {
+      "schema": "Product",
+      "description": "Parcel types and categories"
+    },
+    "/pricingRules/{ruleId}": {
+      "schema": "PricingRule",
+      "description": "Dynamic pricing configuration per country and product"
+    },
+    "/shipments/{shipmentId}": {
+      "schema": "Shipment",
+      "description": "Courier shipments and public/internal tracking history"
+    },
+    "/quoteRequests/{quoteId}": {
+      "schema": "QuoteRequest",
+      "description": "Customer courier requests"
+    },
+    "/contactMessages/{messageId}": {
+      "schema": "ContactMessage",
+      "description": "Customer inquiry messages"
+    },
+    "/blogPosts/{postId}": {
+      "schema": "BlogPost",
+      "description": "Articles, news, and shipping guides"
+    },
+    "/websiteSettings/{settingId}": {
+      "schema": "WebsiteSettings",
+      "description": "CMS configuration"
+    },
+    "/notifications/{notificationId}": {
+      "schema": "AdminNotification",
+      "description": "Notifications for admin team"
+    },
+    "/activityLogs/{logId}": {
+      "schema": "ActivityLog",
+      "description": "Admin action audit trail"
+    },
+    "/admins/{adminId}": {
+      "schema": {
+        "$ref": "#/entities/Country"
+      },
+      "description": "Authorized administrators"
+    }
+  }
+}

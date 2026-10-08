@@ -1,0 +1,92 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Helper functions
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isSuperAdmin() {
+      return isSignedIn() && (
+        request.auth.token.email == "gazisohan37@gmail.com" ||
+        exists(/databases/$(database)/documents/admins/$(request.auth.uid))
+      );
+    }
+
+    // Default deny
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Admins registry
+    match /admins/{adminId} {
+      allow read: if isSignedIn();
+      allow write: if isSuperAdmin();
+    }
+
+    // Destination Countries
+    match /countries/{countryId} {
+      allow read: if true;
+      allow write: if isSuperAdmin();
+    }
+
+    // Products / Parcel Types
+    match /products/{productId} {
+      allow read: if true;
+      allow write: if isSuperAdmin();
+    }
+
+    // Dynamic Pricing Rules
+    match /pricingRules/{ruleId} {
+      allow read: if true;
+      allow write: if isSuperAdmin();
+    }
+
+    // Shipments & Tracking
+    // Tracking is public so customers can track their parcel using trackingNumber.
+    // Writes are strictly restricted to admin.
+    match /shipments/{shipmentId} {
+      allow read: if true;
+      allow write: if isSuperAdmin();
+    }
+
+    // Quote Requests / "Send a Parcel" requests
+    match /quoteRequests/{quoteId} {
+      allow create: if request.resource.data.senderName is string &&
+                       request.resource.data.senderPhone is string &&
+                       request.resource.data.destinationCountry is string;
+      allow read, update, delete: if isSuperAdmin();
+    }
+
+    // Contact messages
+    match /contactMessages/{messageId} {
+      allow create: if request.resource.data.name is string &&
+                       request.resource.data.email is string &&
+                       request.resource.data.message is string;
+      allow read, update, delete: if isSuperAdmin();
+    }
+
+    // Blog posts
+    match /blogPosts/{postId} {
+      allow read: if true;
+      allow write: if isSuperAdmin();
+    }
+
+    // Website Settings / CMS
+    match /websiteSettings/{settingId} {
+      allow read: if true;
+      allow write: if isSuperAdmin();
+    }
+
+    // Admin Notifications
+    match /notifications/{notificationId} {
+      allow read, write: if isSuperAdmin();
+    }
+
+    // Admin Activity Logs
+    match /activityLogs/{logId} {
+      allow read, write: if isSuperAdmin();
+    }
+  }
+}
